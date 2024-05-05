@@ -89,3 +89,39 @@ def deletar_turma(i):
     cur.execute(query,i)
 
 #deletar_curso([1])
+
+# Tabelas de Alunos -------------------------------------------
+# Criar alunos ( Inserir C)
+def criar_alunos(i):
+    with con:
+        cur = con.cursor()
+        query = "INSERT INTO Alunos (nome, email, telefone, sexo, imagem, data_nascimento, turma_nome) VALUES (?,?,?,?,?,?,?)"
+        cur.execute(query,1)
+
+# Ver todas as Alunos ( Read R)
+def ver_alunos():
+    lista = []
+    with con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM Alunos")
+        linha = cur.fetchall()
+
+        for i in linha:
+            lista.append(i)
+    return lista
+#print(ver_alunos())
+
+# Atualizar as Alunos (Update U)
+def atualizar_alunos(i):
+    with con:
+        cur = con.cursor()
+        query = "UPDATE Alunos SET nome=?, email=?, telefone=?, sexo=?, imagem=?, data_nascimento=?, turma_nome=? WHERE id=?"
+        cur.execute(query,i)
+
+#atualizar_alunos(l)
+
+# Deletar as Alunos (DELETE D)
+def deletar_alunos(i):
+    cur = con.cursor()
+    query = "DELETE FROM Alunos WHERE id=?"
+    cur.execute(query,i)

@@ -14,10 +14,10 @@ try:
         cur = con.cursor()
         cur.execute(""" CREATE TABLE IF NOT EXISTS cursos(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT
+            nome TEXT,
             duracao TEXT,
             preco REAL     
-            )""")
+        )""")
         
         print("tabela cursos criado com sucesso!")
 
@@ -34,7 +34,7 @@ try:
             curso_nome TEXT,
             data_inicio DATE,
             FOREIGN KEY (curso_nome) REFERENCES  cursos (nome) ON UPDATE CASCADE ON DELETE CASCADE   
-            )""")
+        )""")
         
         print("tabela turmas criada com sucesso!")
         
@@ -49,10 +49,14 @@ try:
         cur.execute(""" CREATE TABLE IF NOT EXISTS alunos(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
-            alunos TEXT,
-            data_inicio DATE,
-            FOREIGN KEY (alunos) REFERENCES  alunos (nome) ON UPDATE CASCADE ON DELETE CASCADE   
-            )""")
+            email TEXT,
+            telefone TEXT,
+            sexo TEXT,
+            imagem TEXT,
+            data_nascimento DATE,
+            turma_nome TEXT,
+            FOREIGN KEY (turma_nome) REFERENCES  turmas (nome) ON DELETE CASCADE   
+        )""")
         
         print("tabela alunos criada com sucesso!")
         

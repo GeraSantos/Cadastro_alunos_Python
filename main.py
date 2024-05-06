@@ -53,7 +53,7 @@ frame_tabela.grid(row=5, column=0, pady=0, padx=10, sticky=NSEW)
 app_lg = Image.open('allianz.png')
 app_lg = app_lg.resize((50,50))
 app_lg = ImageTk.PhotoImage(app_lg)
-app_logo = Label(frame_logo, Image=app_lg, text="Allianz Jiu Jitsu Itaquera", width=850, compound=LEFT, relief=RAISED, anchor=NW, font=('ivy 15 bold'), bg=co6, fg=co1)
+app_logo = Label(frame_logo, image=app_lg, text="Allianz Jiu Jitsu Itaquera", width=850, compound=LEFT, relief=RAISED, anchor=NW, font=('ivy 15 bold'), bg=co6, fg=co1)
 app_logo.place(x=0, y=0)
 
 

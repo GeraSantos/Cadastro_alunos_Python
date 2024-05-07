@@ -66,7 +66,7 @@ def adicionar():
     frame_tabela_curso = Frame(frame_tabela, width=300, height=200, bg=co1)
     frame_tabela_curso.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW)
 
-    frame_tabela_linha = Frame(frame_tabela, width=30, height=200, bg=co0)
+    frame_tabela_linha = Frame(frame_tabela, width=30, height=200, bg=co1)
     frame_tabela_linha.grid(row=0, column=1, pady=0, padx=10, sticky=NSEW)
 
     frame_tabela_turma = Frame(frame_tabela, width=300, height=200, bg=co0)
@@ -139,6 +139,18 @@ def adicionar():
             tree_curso.insert('', 'end', values=item)
 
     mostrar_cursos()
+
+    # linha separatória ---------------------------
+    l_linha = Label(frame_detalhes, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co0, fg=co0)
+    l_linha.place(x=374, y=10)
+    l_linha = Label(frame_detalhes, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co1, fg=co0)
+    l_linha.place(x=372, y=10)
+
+    # linha separatória tabela
+    l_linha = Label(frame_tabela_linha, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co0, fg=co0)
+    l_linha.place(x=6, y=10)
+    l_linha = Label(frame_tabela_linha, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co1, fg=co0)
+    l_linha.place(x=4, y=10)
 
 # função para salvar 
 def salvar():

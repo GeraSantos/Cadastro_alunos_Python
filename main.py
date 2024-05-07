@@ -100,7 +100,7 @@ def alunos():
     e_cpf.place(x=450, y=100)
 
     # buscando as turmas
-    turmas = ["turma A", "Turma B"]
+    turmas = ["Iniciante", "Graduados", "Kids", "May Thay", "Ioga", "Outros"]
     turma = []
 
     for i in turmas:
@@ -113,13 +113,28 @@ def alunos():
     c_turma.place(x=450, y=160)
 
 
-    # Campo Cidade
+    # Função para selecionar imagem
 
-# função para adicionar cursos e turmas
+    global imagem, imagem_string, l_imagem
+
+    def escolher_imagem():
+        global imagem, imagem_string, l_imagem
+
+        imagem = Image.open('allianz.png')
+        imagem = imagem.resize((130,130))
+        imagem = ImageTk.PhotoImage(imagem)
+        l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+        l_imagem.place(x=300, y=10)
+
+    button_carregar = Button(frame_detalhes, command=escolher_imagem,  text="Carregar foto".upper(), width=20, compound=CENTER, anchor=CENTER, overrelief=RIDGE , font=('ivy 7 bold'), bg=co1, fg=co0)
+    button_carregar.place(x=300, y=160)
+       
+
+# função para adicionar modalidades e turmas
 def adicionar():
     # Criando frames para tabelas -----
-    frame_tabela_curso = Frame(frame_tabela, width=300, height=200, bg=co1)
-    frame_tabela_curso.grid(row=0, column=0, pady=0, padx=10, sticky=NSEW)
+    frame_tabela_modalidade = Frame(frame_tabela, width=300, height=200, bg=co1)
+    frame_tabela_modalidade.grid(row=0, column=0, pady=0, padx=10, sticky=NSEW)
 
     frame_tabela_linha = Frame(frame_tabela, width=30, height=200, bg=co1)
     frame_tabela_linha.grid(row=0, column=1, pady=0, padx=10, sticky=NSEW)
@@ -127,20 +142,20 @@ def adicionar():
     frame_tabela_turma = Frame(frame_tabela, width=300, height=200, bg=co1)
     frame_tabela_turma.grid(row=0, column=2, pady=0, padx=10, sticky=NSEW)
 
-    l_nome = Label(frame_detalhes, text="Nome do curso", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_nome = Label(frame_detalhes, text="Nome da modalidade", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_nome.place(x=4, y=10)
-    e_nomeCurso = Entry(frame_detalhes, width=35, justify='left', relief='solid')
-    e_nomeCurso.place(x=7, y=40)
+    e_nome_modalidade = Entry(frame_detalhes, width=35, justify='left', relief='solid')
+    e_nome_modalidade.place(x=7, y=40)
 
     l_duracao = Label(frame_detalhes, text="Duração *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_duracao.place(x=4, y=70)
     e_duracao = Entry(frame_detalhes, width=20, justify='left', relief='solid')
     e_duracao.place(x=7, y=100)
 
-    l_preco = Label(frame_detalhes, text="Preço *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_preco.place(x=4, y=130)
-    e_preco = Entry(frame_detalhes, width=10, justify='left', relief='solid')
-    e_preco.place(x=7, y=160)
+    l_mensalidade = Label(frame_detalhes, text="Mensalidade *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_mensalidade.place(x=4, y=130)
+    e_mensalidade = Entry(frame_detalhes, width=10, justify='left', relief='solid')
+    e_mensalidade.place(x=7, y=160)
 
     # criar botão carregar
     button_carregar = Button(frame_detalhes, anchor=CENTER, text='Salvar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
@@ -154,46 +169,46 @@ def adicionar():
     button_deletar = Button(frame_detalhes, anchor=CENTER, text='Delete'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co6, fg=co1 )
     button_deletar.place(x=267, y=160)
 
-    # Tabela Curso
-    def mostrar_cursos():
-        app_nome = Label(frame_tabela_curso, text="Tabela de Cursos", height=1,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    # Tabela modalidade
+    def mostrar_modalidades():
+        app_nome = Label(frame_tabela_modalidade, text="Tabela de Modalidades", height=1,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
 
         #creating a treeview with dual scrollbars
-        list_header = ['ID','Curso','Duração','Preço']
+        list_header = ['ID','modalidade','Duração','Preço']
 
         df_list = []
 
-        global tree_curso
+        global tree_modalidade
 
-        tree_curso = ttk.Treeview(frame_tabela_curso, selectmode="extended",columns=list_header, show="headings")
+        tree_modalidade = ttk.Treeview(frame_tabela_modalidade, selectmode="extended",columns=list_header, show="headings")
 
         #vertical scrollbar
-        vsb = ttk.Scrollbar(frame_tabela_curso, orient="vertical", command=tree_curso.yview)
+        vsb = ttk.Scrollbar(frame_tabela_modalidade, orient="vertical", command=tree_modalidade.yview)
         #horizontal scrollbar
-        hsb = ttk.Scrollbar(frame_tabela_curso, orient="horizontal", command=tree_curso.xview)
+        hsb = ttk.Scrollbar(frame_tabela_modalidade, orient="horizontal", command=tree_modalidade.xview)
 
-        tree_curso.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
-        tree_curso.grid(column=0, row=1, sticky='nsew')
+        tree_modalidade.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+        tree_modalidade.grid(column=0, row=1, sticky='nsew')
         vsb.grid(column=1, row=1, sticky='ns')
         hsb.grid(column=0, row=2, sticky='ew')
-        frame_tabela_curso.grid_rowconfigure(0, weight=12)
+        frame_tabela_modalidade.grid_rowconfigure(0, weight=12)
 
         hd=["nw","nw","e","e"]
         h=[30,150,80,60]
         n=0
 
         for col in list_header:
-            tree_curso.heading(col, text=col.title(), anchor=NW)
+            tree_modalidade.heading(col, text=col.title(), anchor=NW)
             #adjust the column's width to the header string
-            tree_curso.column(col, width=h[n],anchor=hd[n])
+            tree_modalidade.column(col, width=h[n],anchor=hd[n])
 
             n+=1
 
         for item in df_list:
-            tree_curso.insert('', 'end', values=item)
+            tree_modalidade.insert('', 'end', values=item)
 
-    mostrar_cursos()
+    mostrar_modalidades()
 
     # linha separatória ---------------------------
     l_linha = Label(frame_detalhes, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co0, fg=co0)
@@ -214,19 +229,19 @@ def adicionar():
     e_nome_turma = Entry(frame_detalhes, width=35, justify='left', relief="solid")
     e_nome_turma.place(x=407, y=40)
 
-    l_turma = Label(frame_detalhes, text="Curso *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_turma = Label(frame_detalhes, text="modalidade *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_turma.place(x=404, y=70)
 
     # buscando os modalidades
-    cursos = ["curso 1", "curso 2"]
-    curso = []
+    modalidades = ["Graduado", "Iniciante", "Kids", "Muy Thay", "Ioga"]
+    modalidade = []
 
-    for i in cursos:
-        curso.append(i)
+    for i in modalidades:
+        modalidade.append(i)
 
-    c_curso = ttk.Combobox(frame_detalhes, width=20, font=('Ivy 8 bold'))
-    c_curso["values"] = (curso)
-    c_curso.place(x=407, y=100)
+    c_modalidade = ttk.Combobox(frame_detalhes, width=20, font=('Ivy 8 bold'))
+    c_modalidade["values"] = (modalidade)
+    c_modalidade.place(x=407, y=100)
 
     l_data_inicio = Label(frame_detalhes, text="Data de inicio *", height=1, anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
     l_data_inicio.place(x=400, y=130)
@@ -251,7 +266,7 @@ def adicionar():
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
 
         #creating a treeview with dual scrollbars
-        list_header = ['ID','Nome da Turma','Curso','Inicio']
+        list_header = ['ID','Nome da Turma','modalidade','Inicio']
 
         df_list = []
 

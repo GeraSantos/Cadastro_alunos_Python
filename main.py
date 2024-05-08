@@ -11,6 +11,9 @@ from PIL import ImageTk, Image
 from tkcalendar import Calendar, DateEntry
 from datetime import date
 
+# importar View
+from view import *
+
 # definir cores
 # cores
 co0 = "#2e2d2b"  # Preta
@@ -222,6 +225,37 @@ def adicionar():
     frame_tabela_turma = Frame(frame_tabela, width=300, height=200, bg=co1)
     frame_tabela_turma.grid(row=0, column=2, pady=0, padx=10, sticky=NSEW)
 
+    # Detalhes da Modalidade -------------------------------------------------------
+
+    # função para adicionar nova modalidade ---
+    def nova_modalidade():
+        nome = e_nome_modalidade.get()
+        duracao = e_duracao.get()
+        mensalidade = e_mensalidade.get()
+
+        lista = [nome, duracao, mensalidade]
+
+        # codigo para verificar se está vazio algum campo
+        for i in lista:
+            if i== "":
+                messagebox.showerror("Erro", "Preencher todos os campos")
+                return
+        
+        # Inserir os dados 
+        criar_modalidade(lista)
+
+        # mostrar mensagem de sucesso
+        messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso")
+
+        e_nome_modalidade.delete(0, END)
+        e_duracao.delete(0, END)
+        e_mensalidade.delete(0, END)
+
+        # mostrar tabela das modalidades após inserir os dados
+        ver_modalidades()
+
+
+
     l_nome = Label(frame_detalhes, text="Nome da modalidade", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_nome.place(x=4, y=10)
     e_nome_modalidade = Entry(frame_detalhes, width=35, justify='left', relief='solid')
@@ -238,7 +272,7 @@ def adicionar():
     e_mensalidade.place(x=7, y=160)
 
     # criar botão carregar
-    button_carregar = Button(frame_detalhes, anchor=CENTER, text='Salvar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
+    button_carregar = Button(frame_detalhes, command=nova_modalidade, anchor=CENTER, text='Salvar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
     button_carregar.place(x=107, y=160)
 
     # criar botão atualizar
@@ -258,7 +292,7 @@ def adicionar():
         #creating a treeview with dual scrollbars
         list_header = ['ID','modalidade','Duração','Mensalidade']
 
-        df_list = []
+        df_list = ver_modalidades()
 
         global tree_modalidade
 

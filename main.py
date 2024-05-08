@@ -150,7 +150,17 @@ def alunos():
     botao_procurar = Button(frame_detalhes, anchor=CENTER, text="Procurar", width=9, overrelief=RIDGE, font=("Ivy 7 bold"), bg=co1, fg=co4)
     botao_procurar.place(x=757, y=35)
 
+    # criar botão salvar
+    button_salvar = Button(frame_detalhes, anchor=CENTER, text='Salvar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
+    button_salvar.place(x=627, y=110)
 
+    # criar botão atualizar
+    button_atualizar = Button(frame_detalhes, anchor=CENTER, text='Atualizar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
+    button_atualizar.place(x=627, y=135)
+
+    # criar botão deletar
+    button_deletar = Button(frame_detalhes, anchor=CENTER, text='Delete'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co6, fg=co1 )
+    button_deletar.place(x=627, y=160)
        
 
 # função para adicionar modalidades e turmas

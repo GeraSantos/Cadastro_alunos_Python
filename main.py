@@ -119,15 +119,38 @@ def alunos():
 
     def escolher_imagem():
         global imagem, imagem_string, l_imagem
+        # selecionar foto dos arquivos 
+        imagem = fd.askopenfilename()
+        imagem_string = imagem
 
-        imagem = Image.open('allianz.png')
+        # abrindo imagem
+        imagem = Image.open(imagem)
         imagem = imagem.resize((130,130))
         imagem = ImageTk.PhotoImage(imagem)
         l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
         l_imagem.place(x=300, y=10)
 
+        button_carregar["text"] = "Trocar de Foto"
+
     button_carregar = Button(frame_detalhes, command=escolher_imagem,  text="Carregar foto".upper(), width=20, compound=CENTER, anchor=CENTER, overrelief=RIDGE , font=('ivy 7 bold'), bg=co1, fg=co0)
     button_carregar.place(x=300, y=160)
+
+    # linha separatória ---------------------------
+    l_linha = Label(frame_detalhes, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co0, fg=co0)
+    l_linha.place(x=610, y=10)
+    l_linha = Label(frame_detalhes, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co1, fg=co0)
+    l_linha.place(x=608, y=10)
+
+    # Criar campo de busca 
+    l_localizar_nome = Label(frame_detalhes, text="Procurar Aluno [ Entra com nome ] ", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_localizar_nome.place(x=627, y=10)
+    e_localizar_nome = Entry(frame_detalhes, width=17, justify='center', relief='solid', font=("Ivy 10"))
+    e_localizar_nome.place(x=630, y=35)
+
+    botao_procurar = Button(frame_detalhes, anchor=CENTER, text="Procurar", width=9, overrelief=RIDGE, font=("Ivy 7 bold"), bg=co1, fg=co4)
+    botao_procurar.place(x=757, y=35)
+
+
        
 
 # função para adicionar modalidades e turmas

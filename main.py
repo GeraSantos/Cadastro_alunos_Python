@@ -250,6 +250,7 @@ def adicionar():
     button_deletar.place(x=267, y=160)
 
     # Tabela modalidade
+    # adcionada a tabela com dados do aluno
     def mostrar_modalidades():
         app_nome = Label(frame_tabela_modalidade, text="Tabela de Modalidades", height=1,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
@@ -289,7 +290,7 @@ def adicionar():
             tree_modalidade.insert('', 'end', values=item)
 
     mostrar_modalidades()
-
+    
     # linha separatória ---------------------------
     l_linha = Label(frame_detalhes, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co0, fg=co0)
     l_linha.place(x=374, y=10)

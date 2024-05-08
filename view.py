@@ -10,46 +10,46 @@ except sqlite3.Error as e:
 
 # tabela de cursos -------------------------------------------
 # criar função criar cursos ( inserir cliente C ) CRUD
-def criar_curso(i):
+def criar_modalidade(i):
     with con:
         cur = con.cursor()
-        query = "INSERT INTO Cursos (nome, duracao, preco) VALUES (?,?,?)"
+        query = "INSERT INTO Modalidades (nome, duracao, mensalidade) VALUES (?,?,?)"
         cur.execute(query,i)
 
 #criar_curso(['Java','Duas Semanas', 70])
 
 # Ver todos os cursos (selecionar R) CRUD
-def ver_cursos():
+def ver_modalidades():
     lista = []
     with con:
         cur = con.cursor()
-        cur.execute("SELECT * FROM Cursos")
+        cur.execute("SELECT * FROM Modalidades")
         linha = cur.fetchall()
 
         for i in linha:
             lista.append(i)
     return lista
 
-print(ver_cursos())
+print(ver_modalidades())
 
 # Atualizar os Cursos (Update U)
-def atualizar_curso(i):
+def atualizar_modalidade(i):
     with con:
         cur = con.cursor()
         query = "UPDATE Cursos SET nome=?, duracao=?, preco=? WHERE id=?"
         cur.execute(query,i)
 
 l = ['Java', 'Duas Semanas', 90, 3]
-#atualizar_curso(l)
+#atualizar_modalidade(l)
 
 
 # Deletar os cursos (DELETE D)
-def deletar_curso(i):
+def deletar_modalidade(i):
     cur = con.cursor()
     query = "DELETE FROM Cursos WHERE id=?"
     cur.execute(query,i)
 
-deletar_curso([1])
+deletar_modalidade([1])
 
 # Tabelas de Turmas -------------------------------------------
 
@@ -57,7 +57,7 @@ deletar_curso([1])
 def criar_turmas(i):
     with con:
         cur = con.cursor()
-        query = "INSERT INTO Turmas (nome, curso_nome, data_inicio) VALUES (?,?,?)"
+        query = "INSERT INTO Turmas (nome, modalidade_nome, data_inicio) VALUES (?,?,?)"
         cur.execute(query,1)
 
 # Ver todas as Turmas ( Read R)
@@ -77,7 +77,7 @@ def ver_turmas():
 def atualizar_turmas(i):
     with con:
         cur = con.cursor()
-        query = "UPDATE Turmas SET nome=?, cursos_nome=?, data_inicio=? WHERE id=?"
+        query = "UPDATE Turmas SET nome=?, modalidade_nome=?, data_inicio=? WHERE id=?"
         cur.execute(query,i)
 
 #atualizar_curso(l)

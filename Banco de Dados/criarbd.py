@@ -12,17 +12,17 @@ except sqlite3.Error as e:
 try:
     with con:
         cur = con.cursor()
-        cur.execute(""" CREATE TABLE IF NOT EXISTS cursos(
+        cur.execute(""" CREATE TABLE IF NOT EXISTS modalidades(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
             duracao TEXT,
-            preco REAL     
+            mensalidade REAL     
         )""")
         
-        print("tabela cursos criado com sucesso!")
+        print("tabela modalidade criado com sucesso!")
 
 except sqlite3.Error as e:
-    print("Erro ao criar tabela de cursos:", e)
+    print("Erro ao criar tabela de modalidades:", e)
 
 # Criando tabela de turmas
 try:
@@ -31,9 +31,9 @@ try:
         cur.execute(""" CREATE TABLE IF NOT EXISTS turmas(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
-            curso_nome TEXT,
+            modalidade_nome TEXT,
             data_inicio DATE,
-            FOREIGN KEY (curso_nome) REFERENCES  cursos (nome) ON UPDATE CASCADE ON DELETE CASCADE   
+            FOREIGN KEY (modalidade_nome) REFERENCES  modalidades (nome) ON UPDATE CASCADE ON DELETE CASCADE   
         )""")
         
         print("tabela turmas criada com sucesso!")

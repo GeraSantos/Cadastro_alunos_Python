@@ -254,6 +254,80 @@ def adicionar():
         # mostrar tabela das modalidades após inserir os dados
         ver_modalidades()
 
+    # função para adicionar nova modalidade ---
+    # Precisa inserir um comando para identificar se os dados correspondem aos mesmos já no banco de dados
+    def update_modalidade():
+        try:
+            tree_itens = tree_modalidade.focus()
+            tree_dicionario = tree_modalidade.item(tree_itens)
+            tree_lista = tree_dicionario["values"]
+
+            valor_id = tree_lista[0]
+
+            # inserindo os valores nas entries
+            e_nome_modalidade.insert(0, tree_lista[1])
+            e_duracao.insert(0, tree_lista[2])
+            e_mensalidade.insert(0, tree_lista[3])
+
+            # Função atualizar 
+            def update():
+                
+                nome = e_nome_modalidade.get()
+                duracao = e_duracao.get()
+                mensalidade = e_mensalidade.get()
+
+                lista = [nome, duracao, mensalidade, valor_id]
+
+                # codigo para verificar se está vazio algum campo
+                for i in lista:
+                    if i== "":
+                        messagebox.showerror("Erro", "Preencher todos os campos")
+                        return
+                
+                # Inserir os dados 
+                atualizar_modalidade(lista)
+
+                # mostrar mensagem de sucesso
+                messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso")
+
+                e_nome_modalidade.delete(0, END)
+                e_duracao.delete(0, END)
+                e_mensalidade.delete(0, END)
+
+                # mostrar tabela das modalidades após inserir os dados
+                ver_modalidades()
+
+                # apagando o botão salvar após salvar os dados
+                button_salvar.destroy()  
+            
+            button_salvar = Button(frame_detalhes, command=update, anchor=CENTER, text='Salvar atualização'.upper(), overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
+            button_salvar.place(x=227, y=130)
+
+        except IndexError:
+            messagebox.showerror("Erro", "Selecione uma das categorias na tabela")
+
+
+    # Função deletar modalidade
+    def delete_modalidade():
+        try:
+            tree_itens = tree_modalidade.focus()
+            tree_dicionario = tree_modalidade.item(tree_itens)
+            tree_lista = tree_dicionario["values"]
+
+            valor_id = tree_lista[0]
+
+            # apagar os dados no banco de dados
+            deletar_modalidade([valor_id])
+
+            # mostrar mensagem de sucesso
+            messagebox.showinfo("Sucesso", "Os dados foram deletados com sucesso")
+
+            # mostrar tabela das modalidades após inserir os dados
+            ver_modalidades()
+
+        except IndexError:
+            messagebox.showerror("Erro", "Selecione uma das modalidades da tabela")
+
 
 
     l_nome = Label(frame_detalhes, text="Nome da modalidade", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
@@ -272,15 +346,15 @@ def adicionar():
     e_mensalidade.place(x=7, y=160)
 
     # criar botão carregar
-    button_carregar = Button(frame_detalhes, command=nova_modalidade, anchor=CENTER, text='Salvar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
+    button_carregar = Button(frame_detalhes, command=nova_modalidade, anchor=CENTER, text='Criar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
     button_carregar.place(x=107, y=160)
 
     # criar botão atualizar
-    button_atualizar = Button(frame_detalhes, anchor=CENTER, text='Atualizar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
+    button_atualizar = Button(frame_detalhes, command=update_modalidade ,anchor=CENTER, text='Atualizar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
     button_atualizar.place(x=187, y=160)
 
     # criar botão deletar
-    button_deletar = Button(frame_detalhes, anchor=CENTER, text='Delete'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co6, fg=co1 )
+    button_deletar = Button(frame_detalhes, command= delete_modalidade, anchor=CENTER, text='Delete'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co6, fg=co1 )
     button_deletar.place(x=267, y=160)
 
     # Tabela modalidade
@@ -364,7 +438,7 @@ def adicionar():
     data_inicio.place(x=407, y=160)
 
     # criar botão carregar
-    button_carregar = Button(frame_detalhes, anchor=CENTER, text='Salvar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
+    button_carregar = Button(frame_detalhes, anchor=CENTER, text='Criar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
     button_carregar.place(x=507, y=160)
 
     # criar botão atualizar

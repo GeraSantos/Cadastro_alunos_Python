@@ -39,15 +39,15 @@ def atualizar_modalidade(i):
         query = "UPDATE Cursos SET nome=?, duracao=?, preco=? WHERE id=?"
         cur.execute(query,i)
 
-l = ['Java', 'Duas Semanas', 90, 3]
 #atualizar_modalidade(l)
 
 
-# Deletar os cursos (DELETE D)
+# Deletar os modalidade (DELETE D)
 def deletar_modalidade(i):
-    cur = con.cursor()
-    query = "DELETE FROM Cursos WHERE id=?"
-    cur.execute(query,i)
+    with con:
+        cur = con.cursor()
+        query = "DELETE FROM Modalidades WHERE id=?"
+        cur.execute(query,i)
 
 deletar_modalidade([1])
 

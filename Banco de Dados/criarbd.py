@@ -8,7 +8,7 @@ try:
 except sqlite3.Error as e:
     print("Erro ao conectar com banco de dados:", e)
 
-# Criando tabela de cursos
+# Criando tabela de modalidade
 try:
     with con:
         cur = con.cursor()

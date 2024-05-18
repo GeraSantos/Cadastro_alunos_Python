@@ -31,7 +31,7 @@ co9 = "#e9edf5"   # + verde
 # Crando Janela
 janela = Tk()
 janela.title("")
-janela.geometry("850x620")
+janela.geometry("1020x620")
 janela.configure(background=co1)
 janela.resizable(width=FALSE, height=FALSE)
 
@@ -39,29 +39,30 @@ style = Style(janela)
 style.theme_use("clam")
 
 # Criando Frames
-frame_logo = Frame(janela, width=850, height=52, bg=co5)
+frame_logo = Frame(janela, width=1020, height=52, bg=co5)
 frame_logo.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW)
 
 ttk.Separator(janela, orient=HORIZONTAL).grid(row=1, columnspan=1, ipadx=680)
 
-frame_dados = Frame(janela, width=850, height=65, bg=co1)
+frame_dados = Frame(janela, width=1020, height=65, bg=co1)
 frame_dados.grid(row=2, column=0, pady=0, padx=0, sticky=NSEW)
 
 ttk.Separator(janela, orient=HORIZONTAL).grid(row=3, columnspan=1, ipadx=680)
 
-frame_detalhes = Frame(janela, width=850, height=200, bg=co1)
+frame_detalhes = Frame(janela, width=1020, height=200, bg=co1)
 frame_detalhes.grid(row=4, column=0, pady=0, padx=10, sticky=NSEW)
 
-frame_tabela = Frame(janela, width=850, height=200, bg=co1)
-frame_tabela.grid(row=5, column=0, pady=0, padx=10, sticky=NSEW)
+frame_tabela = Frame(janela, width=1020, height=200, bg=co1)
+frame_tabela.grid(row=31, column=0, pady=0, padx=10, sticky=NSEW)
 
 # Trabalhando no frame logo -------------------------------------------
 
 app_lg = Image.open('kimono.png')
 app_lg = app_lg.resize((50,50))
 app_lg = ImageTk.PhotoImage(app_lg)
-app_logo = Label(frame_logo, image=app_lg, text="Allianz Jiu Jitsu Itaquera", width=850, compound=LEFT, relief=RAISED, anchor=NW, font=('ivy 15 bold'), bg=co5, fg=co1)
+app_logo = Label(frame_logo, image=app_lg, text="Allianz Jiu Jitsu Itaquera", width=1020, compound=LEFT, relief=RAISED, anchor=NW, font=('ivy 15 bold'), bg=co5, fg=co1)
 app_logo.place(x=0, y=0)
+
 
 # função para cadastrar alunos
 def alunos():
@@ -71,24 +72,37 @@ def alunos():
     e_nome = Entry(frame_detalhes, width=45, justify='left', relief='solid')
     e_nome.place(x=7, y=40)
 
-    #Criar campo de entrada email
+     #Criar campo de entrada email
     l_email = Label(frame_detalhes, text="e-mail *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_email.place(x=4, y=70)
+    l_email.place(x=4, y=60)
     e_email = Entry(frame_detalhes, width=45, justify='left', relief='solid')
-    e_email.place(x=7, y=100)
+    e_email.place(x=7, y=80)
+
+    # #Criar campo de entrada faixa
+    l_faixa = Label(frame_detalhes, text="Faixa*", height=1, anchor=NW, font=('Ivy 7'), bg=co1, fg=co4)
+    l_faixa.place(x=4, y=115)
+    e_faixa = Entry(frame_detalhes, width=15, justify='left', relief='solid')
+    e_faixa.place(x=7, y=130)
+
+    # seleção de grau
+    l_grau = Label(frame_detalhes, text="Grau *", height=1, anchor=NW, font=('Ivy 7'), bg=co1, fg=co4)
+    l_grau.place(x=190, y=115)
+    c_grau = ttk.Combobox(frame_detalhes, width=12, font=('Ivy 8 bold'))
+    c_grau["values"] = ("1", "2", "3", "4")
+    c_grau.place(x=190, y=130)
 
     #Criar campo de entrada telefone
     l_telefone = Label(frame_detalhes, text="Telefone *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_telefone.place(x=4, y=130)
+    l_telefone.place(x=4, y=150)
     e_telefone = Entry(frame_detalhes, width=20, justify='left', relief='solid')
-    e_telefone.place(x=7, y=160)
+    e_telefone.place(x=7, y=170)
 
     # seleção de genero
     l_genero = Label(frame_detalhes, text="Sexo *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_genero.place(x=190, y=130)
+    l_genero.place(x=190, y=150)
     c_genero = ttk.Combobox(frame_detalhes, width=12, font=('Ivy 8 bold'))
     c_genero["values"] = ("Masculino", "Feminino")
-    c_genero.place(x=190, y=160)
+    c_genero.place(x=190, y=170)
 
     # Selecionar data de nascimento
     l_data_nascimento = Label(frame_detalhes, text="Data de nascimento *", height=1, anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
@@ -165,7 +179,7 @@ def alunos():
     button_deletar = Button(frame_detalhes, anchor=CENTER, text='Delete'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co6, fg=co1 )
     button_deletar.place(x=627, y=160)
 
-    # criar botão deletar
+    # criar botão ver
     button_ver = Button(frame_detalhes, anchor=CENTER, text='Ver'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0 )
     button_ver.place(x=727, y=160)
 
@@ -176,7 +190,7 @@ def alunos():
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
 
         # creating a treeview with dual scrollbars
-        list_header = ['id','Nome','email',  'Telefone','sexo', 'imagem', 'Data', 'CPF','Modalidade']
+        list_header = ['id','Nome','email', 'faixa', 'grau', 'Telefone','sexo', 'imagem', 'Data', 'CPF','Modalidade']
 
         df_list = []
 
@@ -195,8 +209,8 @@ def alunos():
         hsb.grid(column=0, row=2, sticky='ew')
         frame_tabela.grid_rowconfigure(0, weight=12)
 
-        hd=["nw","nw","nw","center","center","center","center","center","center"]
-        h=[40,150,150,70,70,70,80,80,100]
+        hd=["nw","nw","nw","center","center","center","center","center","center","center","center"]
+        h=[40,150,150,70,70,70,70,70,80,80,100]
         n=0
 
         for col in list_header:
@@ -230,11 +244,10 @@ def adicionar():
     # função para adicionar nova modalidade ---
     def nova_modalidade():
         nome = e_nome_modalidade.get()
-        duracao = e_duracao.get()
+        periodo = e_periodo.get()
         mensalidade = e_mensalidade.get()
 
-        lista = [nome, duracao, mensalidade]
-
+        lista = [nome, periodo, mensalidade]
         # codigo para verificar se está vazio algum campo
         for i in lista:
             if i== "":
@@ -248,12 +261,12 @@ def adicionar():
         messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso")
 
         e_nome_modalidade.delete(0, END)
-        e_duracao.delete(0, END)
+        e_periodo.delete(0, END)
         e_mensalidade.delete(0, END)
 
         # mostrar tabela das modalidades após inserir os dados
         ver_modalidades()
-
+    # adcionar função para apagar os campos antes de inserir os novos dados
     # função para adicionar nova modalidade ---
     # Precisa inserir um comando para identificar se os dados correspondem aos mesmos já no banco de dados
     def update_modalidade():
@@ -263,20 +276,20 @@ def adicionar():
             tree_lista = tree_dicionario["values"]
 
             valor_id = tree_lista[0]
-
+            # inserir função para apagar os campos antes de inserir novos dados
             # inserindo os valores nas entries
             e_nome_modalidade.insert(0, tree_lista[1])
-            e_duracao.insert(0, tree_lista[2])
+            e_periodo.insert(0, tree_lista[2])
             e_mensalidade.insert(0, tree_lista[3])
 
             # Função atualizar 
             def update():
                 
                 nome = e_nome_modalidade.get()
-                duracao = e_duracao.get()
+                periodo = e_periodo.get()
                 mensalidade = e_mensalidade.get()
 
-                lista = [nome, duracao, mensalidade, valor_id]
+                lista = [nome, periodo, mensalidade, valor_id]
 
                 # codigo para verificar se está vazio algum campo
                 for i in lista:
@@ -291,7 +304,7 @@ def adicionar():
                 messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso")
 
                 e_nome_modalidade.delete(0, END)
-                e_duracao.delete(0, END)
+                e_periodo.delete(0, END)
                 e_mensalidade.delete(0, END)
 
                 # mostrar tabela das modalidades após inserir os dados
@@ -335,10 +348,10 @@ def adicionar():
     e_nome_modalidade = Entry(frame_detalhes, width=35, justify='left', relief='solid')
     e_nome_modalidade.place(x=7, y=40)
 
-    l_duracao = Label(frame_detalhes, text="Duração *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_duracao.place(x=4, y=70)
-    e_duracao = Entry(frame_detalhes, width=20, justify='left', relief='solid')
-    e_duracao.place(x=7, y=100)
+    l_periodo = Label(frame_detalhes, text="Período *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_periodo.place(x=4, y=70)
+    e_periodo = Entry(frame_detalhes, width=20, justify='left', relief='solid')
+    e_periodo.place(x=7, y=100)
 
     l_mensalidade = Label(frame_detalhes, text="Mensalidade *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_mensalidade.place(x=4, y=130)
@@ -364,7 +377,7 @@ def adicionar():
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
 
         #creating a treeview with dual scrollbars
-        list_header = ['ID','modalidade','Duração','Mensalidade']
+        list_header = ['ID','modalidade','Periodo','Mensalidade']
 
         df_list = ver_modalidades()
 
@@ -413,20 +426,48 @@ def adicionar():
 
 
     # detalhes da Turma ---------------------------
+    # função nova turma
+
+    def nova_turma():
+        nome = e_nome_turma.get()
+        curso = c_modalidade.get()
+        data = data_inicio.get()
+
+        lista = [nome, curso, data]
+        # codigo para verificar se está vazio algum campo
+        for i in lista:
+            if i== "":
+                messagebox.showerror("Erro", "Preencher todos os campos")
+                return
+        
+        # Inserir os dados 
+        criar_turma(lista)
+
+        # mostrar mensagem de sucesso
+        messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso")
+
+        e_nome_turma.delete(0, END)
+        c_modalidade.delete(0, END)
+        data_inicio.delete(0, END)
+
+        # mostrar tabela das turmas após inserir os dados
+        mostrar_turma()
+
+
     l_nome = Label(frame_detalhes, text="Nome da Turma *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_nome.place(x=404, y=10)
     e_nome_turma = Entry(frame_detalhes, width=35, justify='left', relief="solid")
     e_nome_turma.place(x=407, y=40)
 
-    l_turma = Label(frame_detalhes, text="modalidade *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_turma = Label(frame_detalhes, text="Turma *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_turma.place(x=404, y=70)
 
     # buscando os modalidades
-    modalidades = ["Graduado", "Iniciante", "Kids", "Muy Thay", "Ioga"]
+    modalidades = ver_modalidades()
     modalidade = []
 
     for i in modalidades:
-        modalidade.append(i)
+        modalidade.append(i[1])
 
     c_modalidade = ttk.Combobox(frame_detalhes, width=20, font=('Ivy 8 bold'))
     c_modalidade["values"] = (modalidade)
@@ -438,7 +479,7 @@ def adicionar():
     data_inicio.place(x=407, y=160)
 
     # criar botão carregar
-    button_carregar = Button(frame_detalhes, anchor=CENTER, text='Criar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
+    button_carregar = Button(frame_detalhes, command=nova_turma, anchor=CENTER, text='Criar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
     button_carregar.place(x=507, y=160)
 
     # criar botão atualizar
@@ -455,7 +496,7 @@ def adicionar():
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
 
         #creating a treeview with dual scrollbars
-        list_header = ['ID','Nome da Turma','modalidade','Inicio']
+        list_header = ['ID','Nome da Turma','Curso','Inicio']
 
         df_list = []
 

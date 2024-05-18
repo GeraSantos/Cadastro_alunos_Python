@@ -13,7 +13,7 @@ except sqlite3.Error as e:
 def criar_modalidade(i):
     with con:
         cur = con.cursor()
-        query = "INSERT INTO Modalidades (nome, duracao, mensalidade) VALUES (?,?,?)"
+        query = "INSERT INTO Modalidades (nome, periodo, mensalidade) VALUES (?,?,?)"
         cur.execute(query,i)
 
 #criar_curso(['Java','Duas Semanas', 70])
@@ -36,7 +36,7 @@ print(ver_modalidades())
 def atualizar_modalidade(i):
     with con:
         cur = con.cursor()
-        query = "UPDATE Cursos SET nome=?, duracao=?, preco=? WHERE id=?"
+        query = "UPDATE Modalidades SET nome=?, periodo=?, mensalidade=? WHERE id=?"
         cur.execute(query,i)
 
 #atualizar_modalidade(l)
@@ -54,11 +54,11 @@ deletar_modalidade([1])
 # Tabelas de Turmas -------------------------------------------
 
 # Criar turmas ( Inserir C)
-def criar_turmas(i):
+def criar_turma(i):
     with con:
         cur = con.cursor()
-        query = "INSERT INTO Turmas (nome, modalidade_nome, data_inicio) VALUES (?,?,?)"
-        cur.execute(query,1)
+        query = "INSERT INTO Turmas (nome, cursos_nome, data) VALUES (?,?,?)"
+        cur.execute(query,i)
 
 # Ver todas as Turmas ( Read R)
 def ver_turmas():
@@ -77,7 +77,7 @@ def ver_turmas():
 def atualizar_turmas(i):
     with con:
         cur = con.cursor()
-        query = "UPDATE Turmas SET nome=?, modalidade_nome=?, data_inicio=? WHERE id=?"
+        query = "UPDATE Turmas SET nome=?, cursos_nome=?, data=? WHERE id=?"
         cur.execute(query,i)
 
 #atualizar_curso(l)

@@ -12,10 +12,10 @@ except sqlite3.Error as e:
 try:
     with con:
         cur = con.cursor()
-        cur.execute(""" CREATE TABLE IF NOT EXISTS modalidades(
+        cur.execute(""" CREATE TABLE IF NOT EXISTS Modalidades(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
-            duracao TEXT,
+            periodo TEXT,
             mensalidade REAL     
         )""")
         
@@ -28,12 +28,12 @@ except sqlite3.Error as e:
 try:
     with con:
         cur = con.cursor()
-        cur.execute(""" CREATE TABLE IF NOT EXISTS turmas(
+        cur.execute(""" CREATE TABLE IF NOT EXISTS Turmas(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
-            modalidade_nome TEXT,
-            data_inicio DATE,
-            FOREIGN KEY (modalidade_nome) REFERENCES  modalidades (nome) ON UPDATE CASCADE ON DELETE CASCADE   
+            cursos_nome TEXT,
+            data DATE,
+            FOREIGN KEY (cursos_nome) REFERENCES  turmas (c_curso) ON UPDATE CASCADE ON DELETE CASCADE   
         )""")
         
         print("tabela turmas criada com sucesso!")
@@ -54,6 +54,8 @@ try:
             sexo TEXT,
             imagem TEXT,
             data_nascimento DATE,
+            faixa TEXT,
+            grau TEXT,
             turma_nome TEXT,
             FOREIGN KEY (turma_nome) REFERENCES  turmas (nome) ON DELETE CASCADE   
         )""")

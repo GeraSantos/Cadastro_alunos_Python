@@ -10,7 +10,7 @@ except sqlite3.Error as e:
 
 # tabela de cursos -------------------------------------------
 # criar função criar cursos ( inserir cliente C ) CRUD
-def criar_modalidade(i):
+def criar_modalidade(i): # criar_cursos
     with con:
         cur = con.cursor()
         query = "INSERT INTO Modalidades (nome, periodo, mensalidade) VALUES (?,?,?)"
@@ -19,7 +19,7 @@ def criar_modalidade(i):
 #criar_curso(['Java','Duas Semanas', 70])
 
 # Ver todos os cursos (selecionar R) CRUD
-def ver_modalidades():
+def ver_modalidades(): # ver_cursos
     lista = []
     with con:
         cur = con.cursor()
@@ -33,7 +33,7 @@ def ver_modalidades():
 print(ver_modalidades())
 
 # Atualizar os Cursos (Update U)
-def atualizar_modalidade(i):
+def atualizar_modalidade(i): # atualizar
     with con:
         cur = con.cursor()
         query = "UPDATE Modalidades SET nome=?, periodo=?, mensalidade=? WHERE id=?"

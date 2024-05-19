@@ -451,8 +451,79 @@ def adicionar():
         data_inicio.delete(0, END)
 
         # mostrar tabela das turmas após inserir os dados
-        mostrar_turma()
+        ver_modalidades()
 
+        # função atualizar turma
+    def update_turma():
+        try:
+            tree_itens = tree_turma.focus()
+            tree_dicionario = tree_turma.item(tree_itens)
+            tree_lista = tree_dicionario["values"]
+
+            valor_id = tree_lista[0]
+            # inserir função para apagar os campos antes de inserir novos dados
+            # inserindo os valores nas entries
+            e_nome_turma.insert(0, tree_lista[1])
+            c_modalidade.insert(0, tree_lista[2])
+            data_inicio.insert(0, tree_lista[3])
+
+            # Função atualizar 
+            def update():
+                    
+                nome = e_nome_turma.get()
+                curso = c_modalidade.get()
+                data = data_inicio.get()
+
+                lista = [nome, curso, data, valor_id]
+
+                # codigo para verificar se está vazio algum campo
+                for i in lista:
+                    if i== "":
+                        messagebox.showerror("Erro", "Preencher todos os campos")
+                        return
+                    
+                # Inserir os dados 
+                atualizar_turmas(lista)
+
+                # mostrar mensagem de sucesso
+                messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso")
+
+                e_nome_turma.delete(0, END)
+                c_modalidade.delete(0, END)
+                data_inicio.delete(0, END)
+
+                    # mostrar tabela das modalidades após inserir os dados
+                ver_turmas()
+
+                # apagando o botão salvar após salvar os dados
+                button_salvar.destroy()  
+           #     
+            button_salvar = Button(frame_detalhes, command=update, anchor=CENTER, text='Salvar atualização'.upper(), overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
+            button_salvar.place(x=404, y=130)
+
+        except IndexError:
+            messagebox.showerror("Erro", "Selecione uma das categorias na tabela")
+
+    # Função deletar turma
+    def delete_turma():
+        try:
+            tree_itens = tree_turma.focus()
+            tree_dicionario = tree_turma.item(tree_itens)
+            tree_lista = tree_dicionario["values"]
+
+            valor_id = tree_lista[0]
+
+            # apagar os dados no banco de dados
+            deletar_turma([valor_id])
+
+            # mostrar mensagem de sucesso
+            messagebox.showinfo("Sucesso", "Os dados foram deletados com sucesso")
+
+            # mostrar tabela das turmas após inserir os dados
+            ver_turmas()
+
+        except IndexError:
+            messagebox.showerror("Erro", "Selecione uma das modalidades da tabela")
 
     l_nome = Label(frame_detalhes, text="Nome da Turma *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_nome.place(x=404, y=10)
@@ -460,7 +531,7 @@ def adicionar():
     e_nome_turma.place(x=407, y=40)
 
     l_turma = Label(frame_detalhes, text="Turma *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_turma.place(x=404, y=70)
+    l_turma.place(x=407, y=70)
 
     # buscando os modalidades
     modalidades = ver_modalidades()
@@ -474,7 +545,7 @@ def adicionar():
     c_modalidade.place(x=407, y=100)
 
     l_data_inicio = Label(frame_detalhes, text="Data de inicio *", height=1, anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
-    l_data_inicio.place(x=400, y=130)
+    l_data_inicio.place(x=404, y=130)
     data_inicio = DateEntry(frame_detalhes, width=10, background="darkblue", foreground="white", borderwidth=2, year=2023 )
     data_inicio.place(x=407, y=160)
 
@@ -483,11 +554,11 @@ def adicionar():
     button_carregar.place(x=507, y=160)
 
     # criar botão atualizar
-    button_atualizar = Button(frame_detalhes, anchor=CENTER, text='Atualizar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
+    button_atualizar = Button(frame_detalhes, command=update_turma, anchor=CENTER, text='Atualizar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
     button_atualizar.place(x=587, y=160)
 
     # criar botão deletar
-    button_deletar = Button(frame_detalhes, anchor=CENTER, text='Delete'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co6, fg=co1 )
+    button_deletar = Button(frame_detalhes, command=delete_turma, anchor=CENTER, text='Delete'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co6, fg=co1 )
     button_deletar.place(x=667, y=160)
 
     # Tabela Turmas
@@ -498,7 +569,7 @@ def adicionar():
         #creating a treeview with dual scrollbars
         list_header = ['ID','Nome da Turma','Curso','Inicio']
 
-        df_list = []
+        df_list = ver_turmas()
 
         global tree_turma
 

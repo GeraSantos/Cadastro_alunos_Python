@@ -66,6 +66,52 @@ app_logo.place(x=0, y=0)
 
 # função para cadastrar alunos
 def alunos():
+
+    # função novo aluno
+    def novo_aluno():
+        # variaveis para buscar a foto do aluno
+        global imagem, imagem_string, l_imagem
+
+        nome = e_nome.get()
+        email = e_email.get()
+        faixa = e_faixa.get()
+        grau = c_grau.get()
+        telefone = e_telefone.get()
+        sexo = c_genero.get()
+        cpf = e_cpf.get()
+        data_nascimento = c_data_nascimento.get()
+        turma_nome = c_turma.get()
+        imagem = imagem_string
+
+        lista = [nome, email, telefone, cpf, sexo, imagem, data_nascimento, faixa, grau, turma_nome]
+
+        # verificar se algum campo esteja vazio
+        for i in lista:
+            if i=="":
+                messagebox.showerror("Erro", "Preencher todos os campos")
+                return
+        
+        # inserindo os dados no Banco de Dados
+        criar_alunos(lista)
+
+        # Mostrando a mensagem de sucesso
+        messagebox.showinfo("Sucesso", "OS dados foram inseridos com sucesso")
+
+        # Limpando os campos de entrada
+        e_nome.delete(0,END)
+        e_email.delete(0,END)
+        e_faixa.delete(0,END)
+        c_grau.delete(0,END)
+        e_telefone.delete(0,END)
+        c_genero.delete(0,END)
+        e_cpf.delete(0,END)
+        c_data_nascimento.delete(0,END)
+        c_turma.delete(0,END)
+        imagem = imagem_string
+        # Mostrando os valores na tabela
+        ver_alunos()
+
+
     #Criar campo de entrada nome
     l_nome = Label(frame_detalhes, text="Nome *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_nome.place(x=4, y=10)
@@ -78,24 +124,17 @@ def alunos():
     e_email = Entry(frame_detalhes, width=45, justify='left', relief='solid')
     e_email.place(x=7, y=80)
 
-    # #Criar campo de entrada faixa
-    l_faixa = Label(frame_detalhes, text="Faixa*", height=1, anchor=NW, font=('Ivy 7'), bg=co1, fg=co4)
-    l_faixa.place(x=4, y=115)
-    e_faixa = Entry(frame_detalhes, width=15, justify='left', relief='solid')
-    e_faixa.place(x=7, y=130)
-
-    # seleção de grau
-    l_grau = Label(frame_detalhes, text="Grau *", height=1, anchor=NW, font=('Ivy 7'), bg=co1, fg=co4)
-    l_grau.place(x=190, y=115)
-    c_grau = ttk.Combobox(frame_detalhes, width=12, font=('Ivy 8 bold'))
-    c_grau["values"] = ("1", "2", "3", "4")
-    c_grau.place(x=190, y=130)
-
     #Criar campo de entrada telefone
     l_telefone = Label(frame_detalhes, text="Telefone *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_telefone.place(x=4, y=150)
     e_telefone = Entry(frame_detalhes, width=20, justify='left', relief='solid')
     e_telefone.place(x=7, y=170)
+
+    # campo CPF
+    l_cpf = Label(frame_detalhes, text="CPF *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_cpf.place(x=446, y=70)
+    e_cpf = Entry(frame_detalhes, width=20, justify='left', relief='solid')
+    e_cpf.place(x=450, y=100)
 
     # seleção de genero
     l_genero = Label(frame_detalhes, text="Sexo *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
@@ -107,21 +146,28 @@ def alunos():
     # Selecionar data de nascimento
     l_data_nascimento = Label(frame_detalhes, text="Data de nascimento *", height=1, anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
     l_data_nascimento.place(x=446, y=10)
-    data_nascimento = DateEntry(frame_detalhes, width=18, background="darkblue", foreground="white", borderwidth=2, year=2023 )
-    data_nascimento.place(x=450, y=40)
+    c_data_nascimento = DateEntry(frame_detalhes, width=18, background="darkblue", foreground="white", borderwidth=2, year=2023 )
+    c_data_nascimento.place(x=450, y=40)
 
-    # campo CPF
-    l_cpf = Label(frame_detalhes, text="CPF *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_cpf.place(x=446, y=70)
-    e_cpf = Entry(frame_detalhes, width=20, justify='left', relief='solid')
-    e_cpf.place(x=450, y=100)
+    # #Criar campo de entrada faixa
+    l_faixa = Label(frame_detalhes, text="Faixa*", height=1, anchor=NW, font=('Ivy 7'), bg=co1, fg=co4)
+    l_faixa.place(x=4, y=115)
+    e_faixa = Entry(frame_detalhes, width=15, justify='left', relief='solid')
+    e_faixa.place(x=7, y=130)
+
+    # seleção de grau
+    l_grau = Label(frame_detalhes, text="Grau *", height=1, anchor=NW, font=('Ivy 7'), bg=co1, fg=co4)
+    l_grau.place(x=190, y=115)
+    c_grau = ttk.Combobox(frame_detalhes, width=12, font=('Ivy 8 bold'))
+    c_grau["values"] = ("0", "1", "2", "3", "4")
+    c_grau.place(x=190, y=130)
 
     # buscando as turmas
-    turmas = ["Iniciante", "Graduados", "Kids", "May Thay", "Ioga", "Outros"]
+    turmas = ver_turmas()
     turma = []
 
     for i in turmas:
-        turma.append(i)
+        turma.append(i[1])
 
     l_turma = Label(frame_detalhes, text="Turma *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_turma.place(x=446, y=130)
@@ -168,7 +214,7 @@ def alunos():
     botao_procurar.place(x=757, y=35)
 
     # criar botão salvar
-    button_salvar = Button(frame_detalhes, anchor=CENTER, text='Salvar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
+    button_salvar = Button(frame_detalhes, command=novo_aluno, anchor=CENTER, text='Salvar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co3, fg=co1 )
     button_salvar.place(x=627, y=110)
 
     # criar botão atualizar
@@ -190,9 +236,9 @@ def alunos():
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
 
         # creating a treeview with dual scrollbars
-        list_header = ['id','Nome','email', 'faixa', 'grau', 'Telefone','sexo', 'imagem', 'Data', 'CPF','Modalidade']
-
-        df_list = []
+        list_header = ['id','Nome','email', 'Telefone', 'CPF', 'sexo', 'imagem', 'Data', 'faixa', 'grau', 'Modalidade']
+                    
+        df_list = ver_alunos()
 
         global tree_curso
 

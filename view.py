@@ -95,7 +95,7 @@ def deletar_turma(i):
 def criar_alunos(i):
     with con:
         cur = con.cursor()
-        query = "INSERT INTO Alunos (nome, email, faixa, grau, telefone, sexo, cpf, data_nascimento, turma_nome, imagem) VALUES (?,?,?,?,?,?,?,?,?,?)"
+        query = "INSERT INTO Alunos (nome, email, sexo, data_nascimento, imagem, turma_nome, faixa, grau, telefone, cpf) VALUES (?,?,?,?,?,?,?,?,?,?)"
         cur.execute(query,i)
 
 # Ver todas as Alunos ( Read R)
@@ -115,7 +115,7 @@ def ver_alunos():
 def atualizar_alunos(i):
     with con:
         cur = con.cursor()
-        query = "UPDATE Alunos SET nome=?, email=?, faixa=?, grau=?, telefone=?, sexo=?, cpf=?, data_nascimento=?, turma_nome=?, imagem=? WHERE id=?"
+        query = "UPDATE Alunos SET nome=?, email=?, sexo=?, data_nascimento=?, imagem=?, turma_nome=?, faixa=?, grau=?, telefone=?, cpf=? WHERE id=?"
         cur.execute(query,i)
 
 #atualizar_alunos(l)

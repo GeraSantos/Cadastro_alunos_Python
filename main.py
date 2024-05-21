@@ -74,12 +74,12 @@ def alunos():
 
         nome = e_nome.get()
         email = e_email.get()
+        telefone = e_telefone.get()
+        cpf = e_cpf.get()
+        sexo = c_genero.get()
+        data_nascimento = c_data_nascimento.get()
         faixa = e_faixa.get()
         grau = c_grau.get()
-        telefone = e_telefone.get()
-        sexo = c_genero.get()
-        cpf = e_cpf.get()
-        data_nascimento = c_data_nascimento.get()
         turma_nome = c_turma.get()
         imagem = imagem_string
 
@@ -100,17 +100,87 @@ def alunos():
         # Limpando os campos de entrada
         e_nome.delete(0,END)
         e_email.delete(0,END)
+        e_telefone.delete(0,END)
+        e_cpf.delete(0,END)
+        c_genero.delete(0,END)
+        c_data_nascimento.delete(0,END)
         e_faixa.delete(0,END)
         c_grau.delete(0,END)
-        e_telefone.delete(0,END)
-        c_genero.delete(0,END)
-        e_cpf.delete(0,END)
-        c_data_nascimento.delete(0,END)
         c_turma.delete(0,END)
-        imagem = imagem_string
         # Mostrando os valores na tabela
         ver_alunos()
 
+    # criada a função atualizar aluno 
+    def update_aluno():
+        global imagem, imagem_string, l_imagem
+
+        try:
+            tree_itens = tree_aluno.focus()
+            tree_dicionario = tree_aluno.item(tree_itens)
+            tree_lista = tree_dicionario["values"]
+
+            valor_id = tree_lista[0]
+            # inserir função para apagar os campos antes de inserir novos dados
+            # inserindo os valores nas entries
+            e_nome.insert(0, tree_lista[1])
+            e_email.insert(0, tree_lista[2])
+            e_telefone.insert(0, tree_lista[3])
+            e_cpf.insert(0, tree_lista[4])
+            c_genero.insert(0, tree_lista[5])
+            c_data_nascimento.insert(0, tree_lista[6])
+            e_faixa.insert(0, tree_lista[7])
+            c_grau.insert(0, tree_lista[8])
+            c_turma.insert(0, tree_lista[9])
+            
+            # Função atualizar 
+            def update():
+                
+                nome = e_nome.get()
+                email = e_email.get()
+                telefone = e_telefone.get()
+                cpf = e_cpf.get()
+                sexo = c_genero.get()
+                imagem = imagem_string
+                data_nascimento = c_data_nascimento.get()
+                faixa = e_faixa.get()
+                grau = c_grau.get()
+                turma_nome = c_turma.get()
+
+                lista = [nome, email, telefone, cpf, sexo, imagem, data_nascimento, faixa, grau, turma_nome ,valor_id]
+
+                # codigo para verificar se está vazio algum campo
+                for i in lista:
+                    if i== "":
+                        messagebox.showerror("Erro", "Preencher todos os campos")
+                        return
+                
+                # Inserir os dados 
+                atualizar_alunos(lista)
+
+                # mostrar mensagem de sucesso
+                messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso")
+
+                e_nome.insert(0, tree_lista[1])
+                e_email.insert(0, tree_lista[2])
+                e_telefone.insert(0, tree_lista[3])
+                e_cpf.insert(0, tree_lista[4])
+                c_genero.insert(0, tree_lista[5])
+                c_data_nascimento.insert(0, tree_lista[6])
+                e_faixa.insert(0, tree_lista[7])
+                c_grau.insert(0, tree_lista[8])
+                c_turma.insert(0, tree_lista[9])
+
+                # mostrar tabela das modalidades após inserir os dados
+                ver_alunos()
+
+                # apagando o botão salvar após salvar os dados
+                button_salvar.destroy()  
+            
+            button_salvar = Button(frame_detalhes, command=update, anchor=CENTER, text='Salvar atualização'.upper(), overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
+            button_salvar.place(x=827, y=130)
+
+        except IndexError:
+            messagebox.showerror("Erro", "Selecione uma das categorias na tabela")
 
     #Criar campo de entrada nome
     l_nome = Label(frame_detalhes, text="Nome *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
@@ -124,31 +194,6 @@ def alunos():
     e_email = Entry(frame_detalhes, width=45, justify='left', relief='solid')
     e_email.place(x=7, y=80)
 
-    #Criar campo de entrada telefone
-    l_telefone = Label(frame_detalhes, text="Telefone *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_telefone.place(x=4, y=150)
-    e_telefone = Entry(frame_detalhes, width=20, justify='left', relief='solid')
-    e_telefone.place(x=7, y=170)
-
-    # campo CPF
-    l_cpf = Label(frame_detalhes, text="CPF *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_cpf.place(x=446, y=70)
-    e_cpf = Entry(frame_detalhes, width=20, justify='left', relief='solid')
-    e_cpf.place(x=450, y=100)
-
-    # seleção de genero
-    l_genero = Label(frame_detalhes, text="Sexo *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
-    l_genero.place(x=190, y=150)
-    c_genero = ttk.Combobox(frame_detalhes, width=12, font=('Ivy 8 bold'))
-    c_genero["values"] = ("Masculino", "Feminino")
-    c_genero.place(x=190, y=170)
-
-    # Selecionar data de nascimento
-    l_data_nascimento = Label(frame_detalhes, text="Data de nascimento *", height=1, anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
-    l_data_nascimento.place(x=446, y=10)
-    c_data_nascimento = DateEntry(frame_detalhes, width=18, background="darkblue", foreground="white", borderwidth=2, year=2023 )
-    c_data_nascimento.place(x=450, y=40)
-
     # #Criar campo de entrada faixa
     l_faixa = Label(frame_detalhes, text="Faixa*", height=1, anchor=NW, font=('Ivy 7'), bg=co1, fg=co4)
     l_faixa.place(x=4, y=115)
@@ -161,6 +206,31 @@ def alunos():
     c_grau = ttk.Combobox(frame_detalhes, width=12, font=('Ivy 8 bold'))
     c_grau["values"] = ("0", "1", "2", "3", "4")
     c_grau.place(x=190, y=130)
+
+    #Criar campo de entrada telefone
+    l_telefone = Label(frame_detalhes, text="Telefone *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_telefone.place(x=4, y=150)
+    e_telefone = Entry(frame_detalhes, width=20, justify='left', relief='solid')
+    e_telefone.place(x=7, y=170)
+
+    # seleção de genero
+    l_genero = Label(frame_detalhes, text="Sexo *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_genero.place(x=190, y=150)
+    c_genero = ttk.Combobox(frame_detalhes, width=12, font=('Ivy 8 bold'))
+    c_genero["values"] = ("Masc", "Fem")
+    c_genero.place(x=190, y=170)
+
+    # Selecionar data de nascimento
+    l_data_nascimento = Label(frame_detalhes, text="Data de nascimento *", height=1, anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+    l_data_nascimento.place(x=446, y=10)
+    c_data_nascimento = DateEntry(frame_detalhes, width=18, background="darkblue", foreground="white", borderwidth=2, year=2023 )
+    c_data_nascimento.place(x=450, y=40)
+
+    # campo CPF
+    l_cpf = Label(frame_detalhes, text="CPF *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_cpf.place(x=446, y=70)
+    e_cpf = Entry(frame_detalhes, width=20, justify='left', relief='solid')
+    e_cpf.place(x=450, y=100)
 
     # buscando as turmas
     turmas = ver_turmas()
@@ -218,7 +288,7 @@ def alunos():
     button_salvar.place(x=627, y=110)
 
     # criar botão atualizar
-    button_atualizar = Button(frame_detalhes, anchor=CENTER, text='Atualizar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
+    button_atualizar = Button(frame_detalhes, command=update_aluno, anchor=CENTER, text='Atualizar'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
     button_atualizar.place(x=627, y=135)
 
     # criar botão deletar
@@ -236,11 +306,11 @@ def alunos():
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
 
         # creating a treeview with dual scrollbars
-        list_header = ['id','Nome','email', 'Telefone', 'CPF', 'sexo', 'imagem', 'Data', 'faixa', 'grau', 'Modalidade']
+        list_header = ['id','Nome','email', 'sexo', 'Data', 'imagem', 'Modalidade', 'faixa', 'grau', 'Telefone', 'CPF']
                     
         df_list = ver_alunos()
 
-        global tree_curso
+        global tree_aluno
 
         tree_aluno = ttk.Treeview(frame_tabela, selectmode="extended",columns=list_header, show="headings")
 

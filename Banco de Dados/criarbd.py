@@ -50,17 +50,17 @@ try:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
             email TEXT,
+            sexo TEXT,
+            data_nascimento DATE, 
+            imagem TEXT,
+            turma_nome TEXT,
+            faixa TEXT,
+            grau TEXT,       
             telefone TEXT,
             cpf TEXT,
-            sexo TEXT,
-            imagem TEXT,
-            data_nascimento DATE,
-            faixa TEXT,
-            grau TEXT,
-            turma_nome TEXT,
             FOREIGN KEY (turma_nome) REFERENCES  turmas (nome) ON DELETE CASCADE   
         )""")
-        
+
         print("tabela alunos criada com sucesso!")
         
 except sqlite3.Error as e:

@@ -60,7 +60,7 @@ frame_tabela.grid(row=31, column=0, pady=0, padx=10, sticky=NSEW)
 app_lg = Image.open('kimono.png')
 app_lg = app_lg.resize((50,50))
 app_lg = ImageTk.PhotoImage(app_lg)
-app_logo = Label(frame_logo, image=app_lg, text="Allianz Jiu Jitsu Itaquera", width=1020, compound=LEFT, relief=RAISED, anchor=NW, font=('ivy 15 bold'), bg=co5, fg=co1)
+app_logo = Label(frame_logo, image=app_lg, text="Academy Jiu Jitsu ", width=1020, compound=LEFT, relief=RAISED, anchor=NW, font=('ivy 15 bold'), bg=co5, fg=co1)
 app_logo.place(x=0, y=0)
 
 
@@ -74,16 +74,17 @@ def alunos():
 
         nome = e_nome.get()
         email = e_email.get()
-        telefone = e_telefone.get()
-        cpf = e_cpf.get()
         sexo = c_genero.get()
         data_nascimento = c_data_nascimento.get()
+        imagem = imagem_string
+        turma_nome = c_turma.get()
         faixa = e_faixa.get()
         grau = c_grau.get()
-        turma_nome = c_turma.get()
-        imagem = imagem_string
+        telefone = e_telefone.get()
+        cpf = e_cpf.get()
+        
 
-        lista = [nome, email, telefone, cpf, sexo, imagem, data_nascimento, faixa, grau, turma_nome]
+        lista = [nome, email, sexo, data_nascimento, imagem, turma_nome, faixa, grau, telefone, cpf]
 
         # verificar se algum campo esteja vazio
         for i in lista:
@@ -98,15 +99,15 @@ def alunos():
         messagebox.showinfo("Sucesso", "OS dados foram inseridos com sucesso")
 
         # Limpando os campos de entrada
-        e_nome.delete(0,END)
-        e_email.delete(0,END)
-        e_telefone.delete(0,END)
-        e_cpf.delete(0,END)
-        c_genero.delete(0,END)
-        c_data_nascimento.delete(0,END)
-        e_faixa.delete(0,END)
-        c_grau.delete(0,END)
-        c_turma.delete(0,END)
+        e_nome.delete(0, END)
+        e_email.delete(0, END)
+        c_genero.delete(0, END)
+        c_data_nascimento.delete(0, END)
+        c_turma.delete(0, END)
+        e_faixa.delete(0, END)
+        c_grau.delete(0, END)
+        e_telefone.delete(0, END)
+        e_cpf.delete(0, END)
         # Mostrando os valores na tabela
         ver_alunos()
 
@@ -120,33 +121,55 @@ def alunos():
             tree_lista = tree_dicionario["values"]
 
             valor_id = tree_lista[0]
-            # inserir função para apagar os campos antes de inserir novos dados
-            # inserindo os valores nas entries
+
+            # Limpando os campos de entrada
+            e_nome.delete(0, END)
+            e_email.delete(0, END)
+            c_genero.delete(0, END)
+            c_data_nascimento.delete(0, END)
+            c_turma.delete(0, END)
+            e_faixa.delete(0, END)
+            c_grau.delete(0, END)
+            e_telefone.delete(0, END)
+            e_cpf.delete(0, END)
+
+            # Inserindo os valores nos campos de
             e_nome.insert(0, tree_lista[1])
             e_email.insert(0, tree_lista[2])
-            e_telefone.insert(0, tree_lista[3])
-            e_cpf.insert(0, tree_lista[4])
-            c_genero.insert(0, tree_lista[5])
-            c_data_nascimento.insert(0, tree_lista[6])
+            c_genero.insert(0, tree_lista[3])
+            c_data_nascimento.insert(0, tree_lista[4])
+            c_turma.insert(0, tree_lista[6])
             e_faixa.insert(0, tree_lista[7])
             c_grau.insert(0, tree_lista[8])
-            c_turma.insert(0, tree_lista[9])
+            e_telefone.insert(0, tree_lista[9])
+            e_cpf.insert(0, tree_lista[10])
+        
             
+            imagem = tree_lista[5]
+            imagem_string = imagem 
+
+            # abrindo a imagem
+            imagem = Image.open(imagem)
+            imagem = imagem.resize((130,130))
+            imagem = ImageTk.PhotoImage(imagem)
+            l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+            l_imagem.place(x=300, y=10)
             # Função atualizar 
+            
             def update():
                 
                 nome = e_nome.get()
                 email = e_email.get()
-                telefone = e_telefone.get()
-                cpf = e_cpf.get()
                 sexo = c_genero.get()
-                imagem = imagem_string
                 data_nascimento = c_data_nascimento.get()
+                imagem = imagem_string
+                turma_nome = c_turma.get()
                 faixa = e_faixa.get()
                 grau = c_grau.get()
-                turma_nome = c_turma.get()
+                telefone = e_telefone.get()
+                cpf = e_cpf.get()
 
-                lista = [nome, email, telefone, cpf, sexo, imagem, data_nascimento, faixa, grau, turma_nome ,valor_id]
+                lista = [nome, email, sexo, data_nascimento, imagem, turma_nome, faixa, grau, telefone, cpf, valor_id]
 
                 # codigo para verificar se está vazio algum campo
                 for i in lista:
@@ -154,33 +177,44 @@ def alunos():
                         messagebox.showerror("Erro", "Preencher todos os campos")
                         return
                 
-                # Inserir os dados 
+                # Atualizando os dados 
                 atualizar_alunos(lista)
 
                 # mostrar mensagem de sucesso
-                messagebox.showinfo("Sucesso", "Os dados foram inseridos com sucesso")
+                messagebox.showinfo("Sucesso", "Os dados foram atualizados com sucesso")
 
-                e_nome.insert(0, tree_lista[1])
-                e_email.insert(0, tree_lista[2])
-                e_telefone.insert(0, tree_lista[3])
-                e_cpf.insert(0, tree_lista[4])
-                c_genero.insert(0, tree_lista[5])
-                c_data_nascimento.insert(0, tree_lista[6])
-                e_faixa.insert(0, tree_lista[7])
-                c_grau.insert(0, tree_lista[8])
-                c_turma.insert(0, tree_lista[9])
+                e_nome.insert(0, END)
+                e_email.insert(0, END)
+                c_genero.insert(0, END)
+                c_data_nascimento.insert(0, END)
+                c_turma.insert(0, END)
+                e_faixa.insert(0, END)
+                c_grau.insert(0, END)
+                e_telefone.insert(0, END)
+                e_cpf.insert(0, END)
 
                 # mostrar tabela das modalidades após inserir os dados
                 ver_alunos()
 
+                # Limpando os campos de entrada
+                e_nome.delete(0, END)
+                e_email.delete(0, END)
+                c_genero.delete(0, END)
+                c_data_nascimento.delete(0, END)
+                c_turma.delete(0, END)
+                e_faixa.delete(0, END)
+                c_grau.delete(0, END)
+                e_telefone.delete(0, END)
+                e_cpf.delete(0, END)
+
                 # apagando o botão salvar após salvar os dados
-                button_salvar.destroy()  
+                button_update.destroy()  
             
-            button_salvar = Button(frame_detalhes, command=update, anchor=CENTER, text='Salvar atualização'.upper(), overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
-            button_salvar.place(x=827, y=130)
+            button_update = Button(frame_detalhes, command=update, anchor=CENTER, text='Salvar atualização'.upper(), overrelief=RIDGE, font=('Ivy 7 bold'), bg=co7, fg=co1 )
+            button_update.place(x=827, y=130)
 
         except IndexError:
-            messagebox.showerror("Erro", "Selecione uma das categorias na tabela")
+            messagebox.showerror("Erro", "Selecione uma dos Alunos na tabela")
 
     #Criar campo de entrada nome
     l_nome = Label(frame_detalhes, text="Nome *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)

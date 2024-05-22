@@ -216,6 +216,28 @@ def alunos():
         except IndexError:
             messagebox.showerror("Erro", "Selecione uma dos Alunos na tabela")
 
+    # Função deletar modalidade
+    def delete_aluno():
+        try:
+            tree_itens = tree_aluno.focus()
+            tree_dicionario = tree_aluno.item(tree_itens)
+            tree_lista = tree_dicionario["values"]
+
+            valor_id = tree_lista[0]
+
+            # apagar os dados no banco de dados
+            deletar_alunos([valor_id])
+
+            # mostrar mensagem de sucesso
+            messagebox.showinfo("Sucesso", "Os dados foram deletados com sucesso")
+
+            # mostrar tabela das modalidades após inserir os dados
+            ver_alunos()
+
+        except IndexError:
+            messagebox.showerror("Erro", "Selecione um dos Alunos da tabela")
+
+
     #Criar campo de entrada nome
     l_nome = Label(frame_detalhes, text="Nome *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_nome.place(x=4, y=10)
@@ -308,13 +330,69 @@ def alunos():
     l_linha = Label(frame_detalhes, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co1, fg=co0)
     l_linha.place(x=608, y=10)
 
+        
+        # Função procurar aluno 
+    def procurar_aluno():
+        global imagem, imagem_string, l_imagem
+
+        try:
+            # Obtém o valor do campo de entrada (ID ou nome do aluno)
+            nome = e_localizar_nome.get()
+            # email = e_email.get()
+            # sexo = c_genero.get()
+            # data_nascimento = c_data_nascimento.get()
+            # imagem = imagem_string
+            # turma_nome = c_turma.get()
+            # faixa = e_faixa.get()
+            # grau = c_grau.get()
+            # telefone = e_telefone.get()
+            # cpf = e_cpf.get()
+
+
+            # Verifica se o valor de busca não está vazio
+            if not nome:
+                messagebox.showerror("Erro", "Por favor, insira um nome para buscar")
+                return
+
+            # Limpa a seleção anterior na treeview
+            for item in tree_aluno.selection():
+                tree_aluno.selection_remove(item)
+
+            # Itera sobre todos os itens na treeview para procurar o aluno
+            encontrado = False
+            for item in tree_aluno.get_children():
+                tree_dicionario = tree_aluno.item(item)
+                tree_lista = tree_dicionario["values"]
+
+                # valor_id = tree_lista[0]
+                # Supondo que o ID do aluno está na primeira posição e o nome na segunda
+                valor_id = tree_lista[0]
+                e_aluno = tree_lista[1]
+
+
+            # Verifica se o valor buscado corresponde ao ID ou nome do aluno
+                if nome == valor_id or nome.lower() in e_aluno.lower():
+                    tree_aluno.selection_add(item)
+                    tree_aluno.see(item)  # Rolagem automática para o item encontrado
+                    messagebox.showinfo("Sucesso", f"Aluno encontrado: {e_aluno}")
+                    encontrado = True
+                    break
+
+            
+                # Se não encontrar nenhum aluno correspondente
+            if not encontrado:
+                messagebox.showinfo("Informação", "Aluno não encontrado")    
+
+        except Exception as e:
+            messagebox.showerror("Erro", f"Ocorreu um erro: {e}")
+
     # Criar campo de busca 
     l_localizar_nome = Label(frame_detalhes, text="Procurar Aluno [ Entra com nome ] ", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
     l_localizar_nome.place(x=627, y=10)
     e_localizar_nome = Entry(frame_detalhes, width=17, justify='center', relief='solid', font=("Ivy 10"))
     e_localizar_nome.place(x=630, y=35)
 
-    botao_procurar = Button(frame_detalhes, anchor=CENTER, text="Procurar", width=9, overrelief=RIDGE, font=("Ivy 7 bold"), bg=co1, fg=co4)
+    botao_procurar = Button(frame_detalhes, command=procurar_aluno, anchor=CENTER, text="Procurar", width=9, overrelief=RIDGE, font=("Ivy 7 bold"), bg=co1, fg=co4)
     botao_procurar.place(x=757, y=35)
 
     # criar botão salvar
@@ -326,11 +404,58 @@ def alunos():
     button_atualizar.place(x=627, y=135)
 
     # criar botão deletar
-    button_deletar = Button(frame_detalhes, anchor=CENTER, text='Delete'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co6, fg=co1 )
+    button_deletar = Button(frame_detalhes, command=delete_aluno, anchor=CENTER, text='Delete'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co6, fg=co1 )
     button_deletar.place(x=627, y=160)
 
+
+    def carregar_dados_aluno():
+        global imagem, imagem_string, l_imagem
+
+        try:
+            # Obter o item selecionado na treeview
+            item_selecionado = tree_aluno.selection()[0]
+            
+            # Obter os dados do aluno selecionado
+            tree_dicionario = tree_aluno.item(item_selecionado)
+            dados_aluno = tree_dicionario["values"]
+            
+            # Preencher os campos de entrada com os dados do aluno
+            e_nome.delete(0, END)
+            e_email.delete(0, END)
+            c_genero.delete(0, END)
+            c_data_nascimento.delete(0, END)
+            c_turma.delete(0, END)
+            e_faixa.delete(0, END)
+            c_grau.delete(0, END)
+            e_telefone.delete(0, END)
+            e_cpf.delete(0, END)
+
+            e_nome.insert(0, dados_aluno[1])  # Supondo que o nome do aluno está na segunda posição
+            e_email.insert(0, dados_aluno[2])
+            c_genero.insert(0, dados_aluno[3])
+            c_data_nascimento.insert(0, dados_aluno[4])
+            c_turma.insert(0, dados_aluno[6])
+            e_faixa.insert(0, dados_aluno[7])
+            c_grau.insert(0, dados_aluno[8])
+            e_telefone.insert(0, dados_aluno[9])
+            e_cpf.insert(0, dados_aluno[10])
+            # Preencha os outros campos de acordo com a estrutura dos dados
+
+            # imagem = tree_aluno[5]
+            # imagem_string = imagem 
+
+            # # abrindo a imagem
+            # imagem = Image.open(imagem)
+            # imagem = imagem.resize((130,130))
+            # imagem = ImageTk.PhotoImage(imagem)
+            # l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+            # l_imagem.place(x=300, y=10)
+
+        except IndexError:
+            messagebox.showerror("Erro", "Selecione um aluno na tabela")
+
     # criar botão ver
-    button_ver = Button(frame_detalhes, anchor=CENTER, text='Ver'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0 )
+    button_ver = Button(frame_detalhes, command=carregar_dados_aluno, anchor=CENTER, text='Ver'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co5, fg=co1 )
     button_ver.place(x=727, y=160)
 
 
@@ -755,7 +880,7 @@ def adicionar():
 # função para salvar 
 def salvar():
     print('Salvar')
-
+# incluir nessa função a funcionalidade de gerar arquivo excel, pdf 
 
 # função de controle -----------------------------------------------------
 

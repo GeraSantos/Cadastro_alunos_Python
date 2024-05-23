@@ -305,6 +305,9 @@ def alunos():
     # Função para selecionar imagem
 
     global imagem, imagem_string, l_imagem
+    imagem = None
+    imagem_string = None
+    l_imagem = None
 
     def escolher_imagem():
         global imagem, imagem_string, l_imagem
@@ -316,8 +319,14 @@ def alunos():
         imagem = Image.open(imagem)
         imagem = imagem.resize((130,130))
         imagem = ImageTk.PhotoImage(imagem)
-        l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
-        l_imagem.place(x=300, y=10)
+
+        if l_imagem:
+            l_imagem.config(image=imagem)
+        else:
+            l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+            l_imagem.place(x=300, y=10)
+        
+        l_imagem.imge = imagem # Manter referência à imagem para evitar garbage collection
 
         button_carregar["text"] = "Trocar de Foto"
 
@@ -412,14 +421,16 @@ def alunos():
         global imagem, imagem_string, l_imagem
 
         try:
-            # Obter o item selecionado na treeview
-            item_selecionado = tree_aluno.selection()[0]
+
             
-            # Obter os dados do aluno selecionado
-            tree_dicionario = tree_aluno.item(item_selecionado)
-            dados_aluno = tree_dicionario["values"]
+            tree_itens = tree_aluno.focus()
+            tree_dicionario = tree_aluno.item(tree_itens)
+            tree_lista = tree_dicionario["values"]
             
-            # Preencher os campos de entrada com os dados do aluno
+
+            valor_id = tree_lista[0]
+
+            # Limpando os campos de entrada
             e_nome.delete(0, END)
             e_email.delete(0, END)
             c_genero.delete(0, END)
@@ -430,36 +441,93 @@ def alunos():
             e_telefone.delete(0, END)
             e_cpf.delete(0, END)
 
-            e_nome.insert(0, dados_aluno[1])  # Supondo que o nome do aluno está na segunda posição
-            e_email.insert(0, dados_aluno[2])
-            c_genero.insert(0, dados_aluno[3])
-            c_data_nascimento.insert(0, dados_aluno[4])
-            c_turma.insert(0, dados_aluno[6])
-            e_faixa.insert(0, dados_aluno[7])
-            c_grau.insert(0, dados_aluno[8])
-            e_telefone.insert(0, dados_aluno[9])
-            e_cpf.insert(0, dados_aluno[10])
-            # Preencha os outros campos de acordo com a estrutura dos dados
+            # Inserindo os valores nos campos de
+            e_nome.insert(0, tree_lista[1])
+            e_email.insert(0, tree_lista[2])
+            c_genero.insert(0, tree_lista[3])
+            c_data_nascimento.insert(0, tree_lista[4])
+            c_turma.insert(0, tree_lista[6])
+            e_faixa.insert(0, tree_lista[7])
+            c_grau.insert(0, tree_lista[8])
+            e_telefone.insert(0, tree_lista[9])
+            e_cpf.insert(0, tree_lista[10])
 
-            # imagem = tree_aluno[5]
-            # imagem_string = imagem 
+            imagem = tree_lista[5]
+            imagem_string = imagem
 
-            # # abrindo a imagem
-            # imagem = Image.open(imagem)
-            # imagem = imagem.resize((130,130))
-            # imagem = ImageTk.PhotoImage(imagem)
-            # l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
-            # l_imagem.place(x=300, y=10)
+            # abrindo a imagem
+            imagem = Image.open(imagem)
+            imagem = imagem.resize((130,130))
+            imagem = ImageTk.PhotoImage(imagem)
+            l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+            l_imagem.place(x=300, y=10)
+
+
+            def ver_update():
+                
+                nome = e_nome.get()
+                email = e_email.get()
+                sexo = c_genero.get()
+                data_nascimento = c_data_nascimento.get()
+                imagem = imagem_string
+                turma_nome = c_turma.get()
+                faixa = e_faixa.get()
+                grau = c_grau.get()
+                telefone = e_telefone.get()
+                cpf = e_cpf.get()
+
+                lista = [nome, email, sexo, data_nascimento, imagem, turma_nome, faixa, grau, telefone, cpf, valor_id]
+
+                # codigo para verificar se está vazio algum campo
+                for i in lista:
+                    if i== "":
+                        messagebox.showerror("Erro", "Preencher todos os campos")
+                        return
+                
+                # Atualizando os dados 
+                atualizar_alunos(lista)
+
+                # mostrar mensagem de sucesso
+                messagebox.showinfo("Sucesso", "Os dados foram carregados com sucesso")
+
+                e_nome.insert(0, END)
+                e_email.insert(0, END)
+                c_genero.insert(0, END)
+                c_data_nascimento.insert(0, END)
+                c_turma.insert(0, END)
+                e_faixa.insert(0, END)
+                c_grau.insert(0, END)
+                e_telefone.insert(0, END)
+                e_cpf.insert(0, END)
+
+                # mostrar tabela das modalidades após inserir os dados
+                ver_alunos()
+
+                # Limpando os campos de entrada
+                e_nome.delete(0, END)
+                e_email.delete(0, END)
+                c_genero.delete(0, END)
+                c_data_nascimento.delete(0, END)
+                c_turma.delete(0, END)
+                e_faixa.delete(0, END)
+                c_grau.delete(0, END)
+                e_telefone.delete(0, END)
+                e_cpf.delete(0, END)
+
+            
+
+            l_imagem.image = imagem # Manter a referencia à imagem para evitar garbage collection
+
 
         except IndexError:
             messagebox.showerror("Erro", "Selecione um aluno na tabela")
-
+        
     # criar botão ver
     button_ver = Button(frame_detalhes, command=carregar_dados_aluno, anchor=CENTER, text='Ver'.upper(), width=10, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co5, fg=co1 )
     button_ver.place(x=727, y=160)
 
 
-    #Tabela Alunos
+    #Tabela Aluno
     def mostrar_alunos():
         app_nome = Label(frame_tabela, text="Tabela de Alunos", height=1,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
         app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)

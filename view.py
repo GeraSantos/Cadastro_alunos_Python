@@ -1,11 +1,13 @@
 # importando SQLite
 import sqlite3 as lite
+from datetime import datetime
+from tkinter import ttk, messagebox
 
 # criando conexao
 try:
     con = lite.connect('Cadastro_alunos.db')
     print("Conexão com banco de dados realizado com sucesso!")
-except sqlite3.Error as e:
+except lite.Error as e:
     print("Erro ao conectar com banco de dados:", e)
 
 # tabela de cursos -------------------------------------------
@@ -125,3 +127,15 @@ def deletar_alunos(i):
     cur = con.cursor()
     query = "DELETE FROM Alunos WHERE id=?"
     cur.execute(query,i)
+
+
+# Função para registrar a presença
+def get_alunos():
+    # Conexão com o banco de dados
+    con = lite.connect('Cadastro_alunos.db')
+    cur = con.cursor()
+    cur.execute("SELECT id, nome FROM Alunos")    
+    alunos = cur.fetchall()
+    con.close()
+    return alunos
+

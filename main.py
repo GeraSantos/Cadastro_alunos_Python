@@ -2,6 +2,7 @@ from tkinter.ttk import *
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from datetime import datetime 
 from tkinter import filedialog as fd
 
 # importando pillow
@@ -44,13 +45,16 @@ frame_logo.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW)
 
 ttk.Separator(janela, orient=HORIZONTAL).grid(row=1, columnspan=1, ipadx=680)
 
+
 frame_dados = Frame(janela, width=1020, height=65, bg=co1)
 frame_dados.grid(row=2, column=0, pady=0, padx=0, sticky=NSEW)
 
 ttk.Separator(janela, orient=HORIZONTAL).grid(row=3, columnspan=1, ipadx=680)
 
+
 frame_detalhes = Frame(janela, width=1020, height=200, bg=co1)
 frame_detalhes.grid(row=4, column=0, pady=0, padx=10, sticky=NSEW)
+
 
 frame_tabela = Frame(janela, width=1020, height=200, bg=co1)
 frame_tabela.grid(row=31, column=0, pady=0, padx=10, sticky=NSEW)
@@ -86,6 +90,15 @@ def alunos():
 
         lista = [nome, email, sexo, data_nascimento, imagem, turma_nome, faixa, grau, telefone, cpf]
 
+        # usar uma função como essa para analisar se já tem aluno com mesmos dados
+        # def criar_usuario(usuarios):
+        #     cpf = input("Informe o CPF (somente número): ")
+        #     usuario = filtrar_usuario(cpf, usuarios)
+
+        #     if usuario:
+        #         print("\n@@@ Já existe usuário com esse CPF! @@@")
+        #         return
+        
         # verificar se algum campo esteja vazio
         for i in lista:
             if i=="":
@@ -193,7 +206,7 @@ def alunos():
                 e_telefone.insert(0, END)
                 e_cpf.insert(0, END)
 
-                # mostrar tabela das modalidades após inserir os dados
+                # mostrar tabela das presencas após inserir os dados
                 ver_alunos()
 
                 # Limpando os campos de entrada
@@ -422,12 +435,10 @@ def alunos():
 
         try:
 
-            
             tree_itens = tree_aluno.focus()
             tree_dicionario = tree_aluno.item(tree_itens)
             tree_lista = tree_dicionario["values"]
             
-
             valor_id = tree_lista[0]
 
             # Limpando os campos de entrada
@@ -488,7 +499,7 @@ def alunos():
                 atualizar_alunos(lista)
 
                 # mostrar mensagem de sucesso
-                messagebox.showinfo("Sucesso", "Os dados foram carregados com sucesso")
+                messagebox.showinfo("Sucesso", "Os dados foram atualizados com sucesso")
 
                 e_nome.insert(0, END)
                 e_email.insert(0, END)
@@ -514,10 +525,11 @@ def alunos():
                 e_telefone.delete(0, END)
                 e_cpf.delete(0, END)
 
+                # apagando o botão salvar após salvar os dados
+                button_ver.destroy()
             
 
             l_imagem.image = imagem # Manter a referencia à imagem para evitar garbage collection
-
 
         except IndexError:
             messagebox.showerror("Erro", "Selecione um aluno na tabela")
@@ -945,44 +957,166 @@ def adicionar():
 
     mostrar_turma()
 
+
 # função para salvar 
 def salvar():
     print('Salvar')
 # incluir nessa função a funcionalidade de gerar arquivo excel, pdf 
 
-# função de controle -----------------------------------------------------
+def presenca():
+
+    #Criar campo de entrada nome
+    l_nome = Label(frame_detalhes, text="Nome *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_nome.place(x=4, y=10)
+    e_nome = Entry(frame_detalhes, width=45, justify='left', relief='solid')
+    e_nome.place(x=7, y=40)
+
+    # #Criar campo de entrada faixa
+    l_faixa = Label(frame_detalhes, text="Faixa*", height=1, anchor=NW, font=('Ivy 7'), bg=co1, fg=co4)
+    l_faixa.place(x=4, y=60)
+    e_faixa = Entry(frame_detalhes, width=15, justify='left', relief='solid')
+    e_faixa.place(x=7, y=80)
+
+    # buscando as turmas
+    turmas = ver_turmas()
+    turma = []
+
+    for i in turmas:
+        turma.append(i[1])
+
+
+    l_turma = Label(frame_detalhes, text="Turma *", height=1, anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+    l_turma.place(x=4, y=120)
+    c_turma = ttk.Combobox(frame_detalhes, width=20, font=('Ivy 8 bold'))
+    c_turma["values"] = (turma)
+    c_turma.place(x=4, y=140)
+
+    global imagem, imagem_string, l_imagem
+    imagem = None
+    imagem_string = None
+    l_imagem = None
+
+    def escolher_imagem():
+        global imagem, imagem_string, l_imagem
+        # selecionar foto dos arquivos 
+        imagem = fd.askopenfilename()
+        imagem_string = imagem
+
+        # abrindo imagem
+        imagem = Image.open(imagem)
+        imagem = imagem.resize((130,130))
+        imagem = ImageTk.PhotoImage(imagem)
+
+        if l_imagem:
+            l_imagem.config(image=imagem)
+        else:
+            l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+            l_imagem.place(x=300, y=10)
+        
+        l_imagem.imge = imagem # Manter referência à imagem para evitar garbage collection
+
+        button_carregar["text"] = "Trocar de Foto"
+
+    button_carregar = Button(frame_detalhes, command=escolher_imagem,  text="Carregar foto".upper(), width=20, compound=CENTER, anchor=CENTER, overrelief=RIDGE , font=('ivy 7 bold'), bg=co1, fg=co0)
+    button_carregar.place(x=300, y=160)
+
+    # seleção de grau
+    l_grau = Label(frame_detalhes, text="Grau *", height=1, anchor=NW, font=('Ivy 7'), bg=co1, fg=co4)
+    l_grau.place(x=120, y=60)
+    c_grau = ttk.Combobox(frame_detalhes, width=12, font=('Ivy 8 bold'))
+    c_grau["values"] = ("0", "1", "2", "3", "4")
+    c_grau.place(x=120, y=80)
+
+    # linha separatória ---------------------------
+    l_linha = Label(frame_detalhes, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co0, fg=co0)
+    l_linha.place(x=610, y=10)
+    l_linha = Label(frame_detalhes, relief=GROOVE, text='h', width=1, height=100, anchor=NW, font=('Ivy 1'), bg=co1, fg=co0)
+    l_linha.place(x=608, y=10)
+    #print('Presença')
+    
+
+    #Tabela Aluno
+    def mostrar_alunos():
+        app_nome = Label(frame_tabela, text="Tabela de Alunos", height=1,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
+        app_nome.grid(row=0, column=0, padx=0, pady=10, sticky=NSEW)
+
+        # creating a treeview with dual scrollbars
+        list_header = ['id','Nome','email', 'sexo', 'Data', 'imagem', 'Modalidade', 'faixa', 'grau', 'Telefone', 'CPF']
+                    
+        df_list = ver_alunos()
+
+        global tree_aluno
+
+        tree_aluno = ttk.Treeview(frame_tabela, selectmode="extended",columns=list_header, show="headings")
+
+        # vertical scrollbar
+        vsb = ttk.Scrollbar(frame_tabela, orient="vertical", command=tree_aluno.yview)
+        # horizontal scrollbar
+        hsb = ttk.Scrollbar(frame_tabela, orient="horizontal", command=tree_aluno.xview)
+
+        tree_aluno.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+        tree_aluno.grid(column=0, row=1, sticky='nsew')
+        vsb.grid(column=1, row=1, sticky='ns')
+        hsb.grid(column=0, row=2, sticky='ew')
+        frame_tabela.grid_rowconfigure(0, weight=12)
+
+        hd=["nw","nw","nw","center","center","center","center","center","center","center","center"]
+        h=[40,150,150,70,70,70,70,70,80,80,100]
+        n=0
+
+        for col in list_header:
+            tree_aluno.heading(col, text=col.title(), anchor=NW)
+            #adjust the column's width to the header string
+            tree_aluno.column(col, width=h[n],anchor=hd[n])
+
+            n+=1
+
+        for item in df_list:
+            tree_aluno.insert('', 'end', values=item)
+
+    mostrar_alunos()
+    print('Presença')
+
+def financeiro():
+    print('Financeiro')
+
 
 def control(i):
-    # cadastro de aluno
     if i == 'cadastro':
         for widget in frame_detalhes.winfo_children():
             widget.destroy()
-
         for widget in frame_tabela.winfo_children():
             widget.destroy()
-
-        # chamando a função aluno
         alunos()
 
-    if i == 'adicionar':
+    elif i == 'adicionar':
         for widget in frame_detalhes.winfo_children():
             widget.destroy()
-
         for widget in frame_tabela.winfo_children():
             widget.destroy()
-
-        # chamando a função adicionar
         adicionar()
 
-    if i == 'salvar':
+    elif i == 'salvar':
         for widget in frame_detalhes.winfo_children():
             widget.destroy()
-
         for widget in frame_tabela.winfo_children():
             widget.destroy()
-
-        # chamando a função salvar
         salvar()
+
+    elif i == 'presenca':
+        for widget in frame_detalhes.winfo_children():
+            widget.destroy()
+        for widget in frame_tabela.winfo_children():
+            widget.destroy()
+        presenca()
+
+    elif i == 'financeiro':
+        for widget in frame_detalhes.winfo_children():
+            widget.destroy()
+        for widget in frame_tabela.winfo_children():
+            widget.destroy()
+        financeiro()
+
 
 # Criando os botoes------------------------------------------------
 
@@ -1006,6 +1140,17 @@ app_img_salvar = ImageTk.PhotoImage(app_img_salvar)
 app_salvar = Button(frame_dados, command=lambda:control('salvar'), image=app_img_salvar, text="Salvar", width=100, compound=LEFT, overrelief=RIDGE , font=('ivy 11 bold'), bg=co1, fg=co0)
 app_salvar.place(x=236, y=30)
 
+app_img_presenca = Image.open('add.png')
+app_img_presenca = app_img_presenca.resize((18, 18))
+app_img_presenca = ImageTk.PhotoImage(app_img_presenca)
+app_presenca = Button(frame_dados, command=lambda: control('presenca'), image=app_img_presenca, text="Presença", width=100, compound=LEFT, overrelief=RIDGE, font=('ivy 11 bold'), bg=co1, fg=co0)
+app_presenca.place(x=350, y=30)
+
+app_img_financeiro = Image.open('add.png')
+app_img_financeiro = app_img_financeiro.resize((18, 18))
+app_img_financeiro = ImageTk.PhotoImage(app_img_financeiro)
+app_financeiro = Button(frame_dados, command=lambda: control('financeiro'), image=app_img_presenca, text="Financeiro", width=100, compound=LEFT, overrelief=RIDGE, font=('ivy 11 bold'), bg=co1, fg=co0)
+app_financeiro.place(x=460, y=30)
 
 alunos()
 janela.mainloop()

@@ -65,3 +65,6 @@ try:
         
 except sqlite3.Error as e:
     print("Erro ao criar tabela de alunos:", e)
+
+
+
